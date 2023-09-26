@@ -56,6 +56,9 @@ public class EventHandler
 
     public void OnLeft(LeftEventArgs ev)
     {
+        if (Volunteers.Contains(ev.Player))
+            Volunteers.Remove(ev.Player);
+        
         if (!Round.InProgress)
             return;
         
@@ -97,6 +100,12 @@ public class EventHandler
                 API.API.AFKReplace.ToggleAFKReplace(true);
             });
         }
+    }
+
+    public void OnDying(DyingEventArgs ev)
+    {
+        if (Volunteers.Contains(ev.Player))
+            Volunteers.Remove(ev.Player);
     }
     
     public void OnAnnouncingScpTermination(AnnouncingScpTerminationEventArgs ev)
@@ -155,6 +164,8 @@ public class EventHandler
         FindingVoluteer = true;
         bool dataDisconnected = data.Disconnected;
         
+        int gracePeriod = Entrypoint.Instance.Config.FirstVolunteerTime;
+        
         Log.Debug($"Player requesting a replace disconnected: {dataDisconnected.ToString()}");
         
         while (time > 0)
@@ -187,15 +198,39 @@ public class EventHandler
 
             if (Volunteers.Count > 0)
             {
-                Player volunteer = Volunteers[0];
-                Features.VolunteerHandler.OnVolunteerFound(volunteer, data, player);
-                Volunteers.Clear();
-                NoSpectatorsSwap = false;
-                
-                yield break;
+                if (gracePeriod == -1)
+                {
+                    Player volunteer = Volunteers[0];
+                    Features.VolunteerHandler.OnVolunteerFound(volunteer, data, player);
+                    Volunteers.Clear();
+                    NoSpectatorsSwap = false;
+                    yield break;
+                }
+                if (gracePeriod > 0)
+                {
+                    gracePeriod--;
+                }
+                else
+                {
+                    Player volunteer = Volunteers[Random.Range(0, Volunteers.Count-1)];
+                    Features.VolunteerHandler.OnVolunteerFound(volunteer, data, player);
+                    Volunteers.Clear();
+                    NoSpectatorsSwap = false;
+                    yield break;
+                }
             }
             
             time--;
+        }
+        
+        if (Volunteers.Count > 0)
+        {
+            Player volunteer = Volunteers[Random.Range(0, Volunteers.Count-1)];
+            Features.VolunteerHandler.OnVolunteerFound(volunteer, data, player);
+            Volunteers.Clear();
+            NoSpectatorsSwap = false;
+                
+            yield break;
         }
 
         if (dataDisconnected)

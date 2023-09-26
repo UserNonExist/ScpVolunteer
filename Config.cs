@@ -40,4 +40,6 @@ public class Config : IConfig
     { 
         RoleTypeId.Scp0492,
     };
+    [Description("Time in seconds for the remaining player to join volunteer list after the first player start volunteering. (-1 to instantly replace)")]
+    public int FirstVolunteerTime { get; set; } = 8;
 }

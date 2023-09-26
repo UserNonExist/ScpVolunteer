@@ -11,7 +11,7 @@ public class Entrypoint : Plugin<Config, Translation>
 {
     public override string Name { get; } = "ScpVolunteer";
     public override string Author { get; } = "User_NotExist";
-    public override Version Version { get; } = new Version(1, 0, 2);
+    public override Version Version { get; } = new Version(1, 0, 5);
     public override Version RequiredExiledVersion { get; } = new Version(8, 2, 1);
     public override PluginPriority Priority { get; } = PluginPriority.Highest;
 
@@ -52,6 +52,7 @@ public class Entrypoint : Plugin<Config, Translation>
         Exiled.Events.Handlers.Player.Left += EventHandler.OnLeft;
         Exiled.Events.Handlers.Map.AnnouncingScpTermination += EventHandler.OnAnnouncingScpTermination;
         Exiled.Events.Handlers.Player.SpawningRagdoll += EventHandler.OnSpawningRagdoll;
+        Exiled.Events.Handlers.Player.Dying += EventHandler.OnDying;
     }
     
     public override void OnDisabled()
@@ -61,6 +62,7 @@ public class Entrypoint : Plugin<Config, Translation>
         Exiled.Events.Handlers.Player.Left -= EventHandler.OnLeft;
         Exiled.Events.Handlers.Map.AnnouncingScpTermination -= EventHandler.OnAnnouncingScpTermination;
         Exiled.Events.Handlers.Player.SpawningRagdoll -= EventHandler.OnSpawningRagdoll;
+        Exiled.Events.Handlers.Player.Dying += EventHandler.OnDying;
         
         Harmony.UnpatchAll();
         EventHandler = null;
