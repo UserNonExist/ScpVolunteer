@@ -107,7 +107,7 @@ public class EventHandler
     
     public void OnSpawningRagdoll(SpawningRagdollEventArgs ev)
     {
-        if (ev.Player != PlayersNeedReplacing.Keys.First())
+        if (!PlayersNeedReplacing.Keys.Contains(ev.Player))
             return;
         
         if (FindingVoluteer)
@@ -125,8 +125,13 @@ public class EventHandler
             if (PlayersNeedReplacing.Count > 0 && !FindingVoluteer)
             {
                 Log.Debug("Found a request for volunteer, starting countdown...");
+                
                 Player player = PlayersNeedReplacing.Keys.First();
                 IData data = PlayersNeedReplacing.Values.First();
+                
+                if (data.Disconnected)
+                    Round.IsLocked = true;
+                
                 PlayersNeedReplacing.Remove(player);
                 Timing.RunCoroutine(FindingVolunteerCountdown(Entrypoint.Instance.Config.FindVolunteerTime, player, data));
             }
@@ -218,6 +223,7 @@ public class EventHandler
             Features.VolunteerHandler.OnVolunteerFound(targetPlayer, data, player);
             Volunteers.Clear();
             NoSpectatorsSwap = false;
+            Round.IsLocked = false;
         }
         else
         {

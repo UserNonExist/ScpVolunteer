@@ -64,6 +64,7 @@ public class VolunteerHandler
         Entrypoint.EventHandler.FindingVoluteer = false;
         Map.ClearBroadcasts();
         Map.Broadcast(5, Entrypoint.Instance.Translation.ScpReplacedMessage.Replace("%player%", newPlayer.Nickname).Replace("%role%", oldPlayerData.Role.ToString()));
+        Round.IsLocked = false;
     }
     
     public static void SwapRole(Player newPlayer, Player oldPlayer, IData oldPlayerData)
