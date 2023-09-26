@@ -8,8 +8,19 @@ namespace ScpVolunteer.API;
 
 public class API
 {
-    public static void DisableScpVolunteer()
+    public static void DisableScpVolunteer(bool enable, string pluginName = null)
     {
+        if (pluginName != null)
+            Log.Debug($"{pluginName} is trying to toggle ScpVolunteer to {enable}.");
+        else
+            Log.Debug("A plugin is trying to toggle ScpVolunteer to {enable}.");
+        
+        Entrypoint.EventHandler.IsDisbled = !enable;
+        
+        if (pluginName != null)
+            Log.Debug($"{pluginName} has toggled ScpVolunteer to {enable}.");
+        else
+            Log.Debug("A plugin has toggled ScpVolunteer to {enable}.");
     }
     
     public static bool IsExternalRole(Player player)

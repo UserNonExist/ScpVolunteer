@@ -24,6 +24,8 @@ public class EventHandler
     public bool CanRequestVolunteer;
     public bool NoSpectatorsSwap = false;
     public bool DisconnectReplace = false;
+    
+    public bool IsDisbled = false;
 
     public void OnRestartingRound()
     {
@@ -56,6 +58,9 @@ public class EventHandler
 
     public void OnLeft(LeftEventArgs ev)
     {
+        if (IsDisbled)
+            return;
+        
         if (Volunteers.Contains(ev.Player))
             Volunteers.Remove(ev.Player);
         

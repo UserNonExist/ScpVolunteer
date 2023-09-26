@@ -14,6 +14,12 @@ public class RequestVolunteerCommand : ICommand
     {
         Player player = Player.Get(sender);
         
+        if (Entrypoint.EventHandler.IsDisbled)
+        {
+            response = "ScpVolunteer is disabled.";
+            return false;
+        }
+        
         if (player == null)
         {
             response = "Can't get player instance.";
