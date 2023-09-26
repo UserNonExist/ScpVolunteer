@@ -15,7 +15,7 @@ public class AFKReplace
         Assembly = assembly;
     }
     
-    public void TogglePlayerReplace(bool enabled)
+    public void ToggleAFKReplace(bool enabled)
     {
         if (!PluginEnabled)
             return;

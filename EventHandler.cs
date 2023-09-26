@@ -73,6 +73,7 @@ public class EventHandler
         if (DisconnectReplace && spectators.Count < 1 && Entrypoint.Instance.Config.NoSpectatorsOverride)
         {
             API.API.PlayerReplace.TogglePlayerReplace(false);
+            API.API.AFKReplace.ToggleAFKReplace(false);
         
             IData data;
         
@@ -93,6 +94,7 @@ public class EventHandler
             Timing.CallDelayed(1.1f, () =>
             {
                 API.API.PlayerReplace.TogglePlayerReplace(true);
+                API.API.AFKReplace.ToggleAFKReplace(true);
             });
         }
     }
