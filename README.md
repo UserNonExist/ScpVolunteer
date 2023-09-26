@@ -1,4 +1,4 @@
-# ScpReplace
+# ScpVolunteer
 An EXILED plugin that allows player to volunteer to play as disconnected SCP.
 
 # Features
@@ -11,4 +11,4 @@ An EXILED plugin that allows player to volunteer to play as disconnected SCP.
 # Installation
 In order for this plugin to work, [EXILED](https://github.com/Exiled-Team/EXILED) must be installed on the server.
 
-Download ScpReplace.dll in [release](https://github.com/UserNonExist/ScpReplace/releases/latest) and put it in your plugin folder.
+Download ScpVolunteer.dll in [release](https://github.com/UserNonExist/ScpVolunteer/releases/latest) and put it in your plugin folder.
