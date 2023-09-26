@@ -33,6 +33,11 @@ public class VolunteerHandler
             ply.Broadcast(5, Entrypoint.Instance.Translation.SpectatorCantVolunteerSwapMessage);
             return true;
         }
+
+        if (Entrypoint.EventHandler.Volunteers.Contains(ply))
+        {
+            return true;
+        }
         
         Entrypoint.EventHandler.Volunteers.Add(ply);
         return false;

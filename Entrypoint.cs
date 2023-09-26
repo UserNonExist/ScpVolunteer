@@ -11,7 +11,7 @@ public class Entrypoint : Plugin<Config, Translation>
 {
     public override string Name { get; } = "ScpVolunteer";
     public override string Author { get; } = "User_NotExist";
-    public override Version Version { get; } = new Version(1, 0, 5);
+    public override Version Version { get; } = new Version(1, 0, 7);
     public override Version RequiredExiledVersion { get; } = new Version(8, 2, 1);
     public override PluginPriority Priority { get; } = PluginPriority.Highest;
 
