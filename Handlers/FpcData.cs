@@ -85,11 +85,12 @@ public class FpcData : IData
             int i = 0;
             foreach (var item in Inventory)
             {
+
+                Item newItem = item.Clone();
+                
                 player.AddItem(item.Type);
 
                 Item addedItem = player.Items.ToList()[i];
-                
-                addedItem.Serial = item.Serial;
 
                 switch (item.Type)
                 {

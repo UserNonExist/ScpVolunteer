@@ -95,6 +95,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="API\API.cs" />
+        <Compile Include="API\Features\AFKReplace\AFKReplace.cs" />
         <Compile Include="API\Features\ExternalRoles\CiSpyRole.cs" />
         <Compile Include="API\Features\ExternalRoles\Enums\ExternalRoleType.cs" />
         <Compile Include="API\Features\ExternalRoles\ExternalRoleChecker.cs" />

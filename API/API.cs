@@ -1,4 +1,5 @@
 using Exiled.API.Features;
+using ScpVolunteer.API.Features.AFKReplace;
 using ScpVolunteer.API.Features.ExternalRoles;
 using ScpVolunteer.API.Features.ExternalRoles.Enums;
 using ScpVolunteer.API.Features.PlayerReplace;
@@ -28,6 +29,8 @@ public class API
     }
 
     internal static readonly PlayerReplace PlayerReplace = new PlayerReplace();
+    
+    internal static readonly AFKReplace AFKReplace = new AFKReplace();
     
     internal static readonly ExternalRoleChecker CiSpyRole = new CiSpyRole();
 }

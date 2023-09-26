@@ -40,6 +40,10 @@ public class Entrypoint : Plugin<Config, Translation>
                     Log.Debug("CiSpy found, enabling compatibility patch...");
                     API.API.CiSpyRole.Init(plugin.Assembly);
                     break;
+                case "AFKReplace":
+                    Log.Debug("AFKReplace found, enabling compatibility patch...");
+                    API.API.AFKReplace.Init(plugin.Assembly);
+                    break;
             }
         }
         
