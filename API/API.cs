@@ -25,7 +25,7 @@ public class API
     
     public static bool IsExternalRole(Player player)
     {
-        if (CiSpyRole.IsRole(player) != ExternalRoleType.None)
+        if (SpiesSlRole.IsRole(player) != ExternalRoleType.None)
             return true;
         
         return false;
@@ -33,8 +33,8 @@ public class API
     
     public static ExternalRoleType GetExternalRole(Player player)
     {
-        if (CiSpyRole.IsRole(player) != ExternalRoleType.None)
-            return CiSpyRole.IsRole(player);
+        if (SpiesSlRole.IsRole(player) != ExternalRoleType.None)
+            return SpiesSlRole.IsRole(player);
         
         return ExternalRoleType.None;
     }
@@ -43,5 +43,5 @@ public class API
     
     internal static readonly AFKReplace AFKReplace = new AFKReplace();
     
-    internal static readonly ExternalRoleChecker CiSpyRole = new CiSpyRole();
+    internal static readonly ExternalRoleChecker SpiesSlRole = new SpiesSlRole();
 }

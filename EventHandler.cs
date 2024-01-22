@@ -76,9 +76,42 @@ public class EventHandler
         if (Entrypoint.Instance.Config.BlacklistedLeftScps.Contains(ev.Player.Role.Type))
             return;
         
-        List<Player> spectators = Player.List.Where(x => x.Role == RoleTypeId.Spectator).ToList();
+        if (PlayersNeedReplacing.ContainsKey(ev.Player))
+            return;
         
-        if (DisconnectReplace && spectators.Count < 1 && Entrypoint.Instance.Config.NoSpectatorsOverride)
+        if (Player.List.Count <= 3)
+            return;
+        
+        List<Player> spectators = Player.List.Where(x => x.Role == RoleTypeId.Spectator).ToList();
+
+        if (DisconnectReplace)
+        {
+            API.API.PlayerReplace.TogglePlayerReplace(false);
+            API.API.AFKReplace.ToggleAFKReplace(false);
+        
+            IData data;
+        
+            if (ev.Player.Role.Type == RoleTypeId.Scp079)
+            {
+                data = new Scp079Data();
+            }
+            else
+            {
+                data = new ScpData();
+            }
+        
+            data.Initialize(ev.Player, true);
+            
+            Log.Debug("SCP disconnected and passed the disconnect replace check, requesting...");
+        
+            PlayersNeedReplacing.Add(ev.Player, data);
+            Timing.CallDelayed(1.1f, () =>
+            {
+                API.API.PlayerReplace.TogglePlayerReplace(true);
+                API.API.AFKReplace.ToggleAFKReplace(true);
+            });
+        }
+        else if (spectators.Count < 1 && Entrypoint.Instance.Config.NoSpectatorsOverride)
         {
             API.API.PlayerReplace.TogglePlayerReplace(false);
             API.API.AFKReplace.ToggleAFKReplace(false);
@@ -149,6 +182,9 @@ public class EventHandler
                 PlayersNeedReplacing.Remove(player);
                 Timing.RunCoroutine(FindingVolunteerCountdown(Entrypoint.Instance.Config.FindVolunteerTime, player, data));
             }
+            
+            if (Round.IsEnded)
+                yield break;
         }
     }
 
@@ -176,8 +212,6 @@ public class EventHandler
         while (time > 0)
         {
             string formattedMessage;
-            
-            
             string timestr = time.ToString();
 
             if (dataDisconnected)
@@ -186,6 +220,7 @@ public class EventHandler
                 formattedMessage = formattedMessage.Replace("%player%", player.Nickname);
                 formattedMessage = formattedMessage.Replace("%role%", data.Role.ToString());
                 formattedMessage = formattedMessage.Replace("%time%", timestr);
+                formattedMessage = formattedMessage.Replace("%volunteerCount%", Volunteers.Count.ToString());
             }
             else
             {
@@ -193,6 +228,20 @@ public class EventHandler
                 formattedMessage = formattedMessage.Replace("%player%", player.Nickname);
                 formattedMessage = formattedMessage.Replace("%role%", data.Role.ToString());
                 formattedMessage = formattedMessage.Replace("%time%", timestr);
+                formattedMessage = formattedMessage.Replace("%volunteerCount%", Volunteers.Count.ToString());
+                
+
+                if (data.Role != player.Role.Type)
+                {
+                    Map.ClearBroadcasts();
+                    Map.Broadcast(5, Entrypoint.Instance.Translation.CancelMessage);
+                    yield return Timing.WaitForSeconds(3f);
+                    PlayersNeedReplacing.Remove(player);
+                    Volunteers.Clear();
+                    FindingVoluteer = false;
+                    NoSpectatorsSwap = false;
+                    yield break;
+                }
             }
             
             Map.ClearBroadcasts();
@@ -272,7 +321,6 @@ public class EventHandler
             Map.Broadcast(5, Entrypoint.Instance.Translation.NoVolunteerMessage);
             PlayersNeedReplacing.Remove(player);
             FindingVoluteer = false;
-            NoSpectatorsSwap = false;
         }
     }
 

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.CustomItems.API.Features;
 using InventorySystem;
 using InventorySystem.Items.Firearms.Attachments;
 using MEC;
@@ -26,6 +28,7 @@ public class FpcData : IData
     public float MaxAhp { get; set; }
     public float Stamina { get; set; }
     public IEnumerable<Item> Inventory { get; set; } = new List<Item>();
+    public List<StatusEffectBase> Effects { get; set; } = new List<StatusEffectBase>();
     public ushort AmmoNato9 { get; set; }
     public ushort AmmoNato556 { get; set; }
     public ushort AmmoNato762 { get; set; }
@@ -53,7 +56,11 @@ public class FpcData : IData
         AmmoNato762 = player.GetAmmo(AmmoType.Nato762);
         Ammo12Gauge = player.GetAmmo(AmmoType.Ammo12Gauge);
         Ammo44Cal = player.GetAmmo(AmmoType.Ammo44Cal);
-        
+
+        foreach (var effect in player.ActiveEffects)
+        {
+            Effects.Add(effect);
+        }
         
         ExternalRoleType = API.API.GetExternalRole(player);
     }
@@ -63,10 +70,10 @@ public class FpcData : IData
         switch (ExternalRoleType)
         {
             case ExternalRoleType.ChaosSpy:
-                API.API.CiSpyRole.SpawnRole(player, ExternalRoleType.ChaosSpy);
+                API.API.SpiesSlRole.SpawnRole(player, ExternalRoleType.ChaosSpy);
                 break;
             case ExternalRoleType.NtfSpy:
-                API.API.CiSpyRole.SpawnRole(player, ExternalRoleType.NtfSpy);
+                API.API.SpiesSlRole.SpawnRole(player, ExternalRoleType.NtfSpy);
                 break;
             default:
                 player.Role.Set(Role, RoleSpawnFlags.None);
@@ -85,8 +92,12 @@ public class FpcData : IData
             int i = 0;
             foreach (var item in Inventory)
             {
-
-                Item newItem = item.Clone();
+                if (CustomItem.TryGet(item, out var customItem))
+                {
+                    customItem.Give(player);
+                    i++;
+                    continue;
+                }
                 
                 player.AddItem(item.Type);
 
@@ -101,7 +112,7 @@ public class FpcData : IData
                             microHid.Energy = (item as MicroHid).Energy;
                         }
                         i++;
-                        return;
+                        continue;
                     case ItemType.Radio:
                         Radio radio = player.Items.FirstOrDefault(i => i.Type == ItemType.Radio) as Radio;
                         if (radio != null)
@@ -111,12 +122,10 @@ public class FpcData : IData
                             radio.SetRangeSettings( (item as Radio).Range, (item as Radio).RangeSettings);
                         }
                         i++;
-                        return;
-                    default:
-                        break;
+                        continue;
                 }
 
-                if (item.Type is Firearm == true)
+                if (item.Type is Firearm)
                 {
                     Firearm firearm = addedItem as Firearm;
                     if (firearm != null)
@@ -125,7 +134,6 @@ public class FpcData : IData
                         firearm.AddAttachment( (item as Firearm).AttachmentIdentifiers);
                     }
                 }
-                
                 i++;
             }   
             
@@ -138,6 +146,11 @@ public class FpcData : IData
             player.SetAmmo(AmmoType.Ammo12Gauge, Ammo12Gauge);
             player.SetAmmo(AmmoType.Ammo44Cal, Ammo44Cal);
             player.CurrentItem = CurrentItem;
+
+            foreach (var effect in Effects)
+            {
+                player.EnableEffect(effect);
+            }
         });
     }
 }

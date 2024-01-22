@@ -11,8 +11,8 @@ public class Entrypoint : Plugin<Config, Translation>
 {
     public override string Name { get; } = "ScpVolunteer";
     public override string Author { get; } = "User_NotExist";
-    public override Version Version { get; } = new Version(1, 0, 7);
-    public override Version RequiredExiledVersion { get; } = new Version(8, 2, 1);
+    public override Version Version { get; } = new Version(1, 2, 0);
+    public override Version RequiredExiledVersion { get; } = new Version(8, 7, 0);
     public override PluginPriority Priority { get; } = PluginPriority.Highest;
 
     public static Entrypoint Instance { get; private set; }
@@ -36,9 +36,9 @@ public class Entrypoint : Plugin<Config, Translation>
                     Log.Debug("PlayerReplace found, enabling compatibility patch...");
                     API.API.PlayerReplace.Init(plugin.Assembly);
                     break;
-                case "CiSpy":
-                    Log.Debug("CiSpy found, enabling compatibility patch...");
-                    API.API.CiSpyRole.Init(plugin.Assembly);
+                case "SpiesSl":
+                    Log.Debug("SpiesSl found, enabling compatibility patch...");
+                    API.API.SpiesSlRole.Init(plugin.Assembly);
                     break;
                 case "AFKReplace":
                     Log.Debug("AFKReplace found, enabling compatibility patch...");

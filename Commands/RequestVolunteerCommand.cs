@@ -40,13 +40,13 @@ public class RequestVolunteerCommand : ICommand
 
         if (!Entrypoint.Instance.Config.ScpsCanRequestVolunteerList.Contains(player.Role.Type))
         {
-            response = "Your role can't request a volunteer.";
+            response = "Your role can't request for a volunteer.";
             return false;
         }
 
         if (!Entrypoint.EventHandler.CanRequestVolunteer)
         {
-            response = "You can't request a volunteer right now.";
+            response = "Volunteer period is over.";
             return false;
         }
         

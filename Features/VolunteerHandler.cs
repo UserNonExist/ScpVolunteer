@@ -57,14 +57,6 @@ public class VolunteerHandler
 
     public static void DisconnectReplaceRole(Player newPlayer, IData oldPlayerData)
     {
-        if (oldPlayerData.Role == RoleTypeId.Scp079)
-        {
-            oldPlayerData.Apply(newPlayer);
-            Entrypoint.EventHandler.FindingVoluteer = false;
-            Map.ClearBroadcasts();
-            Map.Broadcast(5, Entrypoint.Instance.Translation.ScpReplacedMessage.Replace("%player%", newPlayer.Nickname).Replace("%role%", oldPlayerData.Role.ToString()));
-        }
-        
         oldPlayerData.Apply(newPlayer);
         Entrypoint.EventHandler.FindingVoluteer = false;
         Map.ClearBroadcasts();
